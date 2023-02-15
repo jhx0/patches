@@ -1,0 +1,59 @@
+--- fold.c.orig	2023-02-11 15:34:31.662689610 +0100
++++ fold.c	2023-02-11 15:36:18.567858338 +0100
+@@ -41,14 +41,18 @@
+ /* If nonzero, count bytes, not column positions. */
+ static bool count_bytes;
+ 
++/* If nonzero, cut line off, don't break */
++static bool cut_line;
++
+ /* If nonzero, at least one of the files we read was standard input. */
+ static bool have_read_stdin;
+ 
+-static char const shortopts[] = "bsw:0::1::2::3::4::5::6::7::8::9::";
++static char const shortopts[] = "bcsw:0::1::2::3::4::5::6::7::8::9::";
+ 
+ static struct option const longopts[] =
+ {
+   {"bytes", no_argument, NULL, 'b'},
++  {"cut", no_argument, NULL, 'c'},
+   {"spaces", no_argument, NULL, 's'},
+   {"width", required_argument, NULL, 'w'},
+   {GETOPT_HELP_OPTION_DECL},
+@@ -206,6 +210,20 @@
+               continue;
+             }
+ 
++          if (cut_line)
++            {
++              /* Print three 'dots' at the end */
++              for(int i = 0; i < 3; i++)
++                line_out[offset_out++] = '.';
++
++              /* Read until the end of the line so the next line can be read */
++              while((c = getc (istream)) != '\n');
++
++              fwrite (line_out, sizeof (char), (size_t) offset_out, stdout);
++              column = offset_out = 0;
++              goto rescan;
++            }
++
+           line_out[offset_out++] = '\n';
+           fwrite (line_out, sizeof (char), (size_t) offset_out, stdout);
+           column = offset_out = 0;
+@@ -264,6 +282,10 @@
+           count_bytes = true;
+           break;
+ 
++        case 'c':   /* Cut off line */
++          cut_line = true;
++          break;
++
+         case 's':		/* Break at word boundaries. */
+           break_spaces = true;
+           break;
+@@ -307,4 +329,3 @@
+ 
+   return ok ? EXIT_SUCCESS : EXIT_FAILURE;
+ }
+-
