@@ -1,0 +1,31 @@
+--- sysctl.8.dist	Tue Feb 21 12:18:21 2023
++++ sysctl.8	Tue Feb 21 12:09:59 2023
+@@ -38,7 +38,7 @@
+ .Nd get or set kernel state
+ .Sh SYNOPSIS
+ .Nm sysctl
+-.Op Fl Aanq
++.Op Fl Aanpq
+ .Op Ar name Ns Op = Ns Ar value
+ .Sh DESCRIPTION
+ The
+@@ -74,6 +74,8 @@
+ For example, to set the psize shell variable to the pagesize of the hardware:
+ .Pp
+ .Dl # set psize=`sysctl -n hw.pagesize`
++.It Fl p
++Read and apply all settings from /etc/sysctl.conf.
+ .It Fl q
+ Suppress all output when setting a variable.
+ This option overrides the behaviour of
+@@ -133,6 +135,10 @@
+ To retrieve information about the load average history:
+ .Pp
+ .Dl $ sysctl vm.loadavg
++.Pp
++To apply all settings from /etc/sysctl.conf
++.Pp
++.Dl # sysctl -p
+ .Pp
+ To make the
+ .Xr chown 2
