@@ -10,7 +10,8 @@ $ patch -p1 < example.patch
 ```
 
 ## About
-**gnu-coreutils/fold-cut-line-feature.patch:** Adds '-c' as an option which cuts off a line at WIDTH (Example: -w80) instead of breaking up the line.
+**gnu-coreutils/fold-cut-line-feature.patch:** Adds '-c' as an option which cuts off a line at WIDTH (Example: -w80) instead of breaking up the line.   
+**openbsd-src/sysctl:** This patch adds the **"-p"** flag to sysctl. This makes reading/applying /etc/sysctl.conf on the fly possible.
 
 ## Hacking
 If you like to improve the given patches make sure you have run/tested them against the projects there are for.
